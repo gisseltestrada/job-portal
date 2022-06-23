@@ -1,6 +1,15 @@
 .App {
   text-align: center;
+ 
 }
+/* body {
+     background-image: url(../background.svg);
+    background-repeat: no-repeat;
+      background-size: 120%;
+      background-position-y: -6rem;
+      background-position-x: -6rem;
+
+} */
 
 .App-logo {
   height: 40vmin;
@@ -14,7 +23,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  /* background-color: #282c34; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
