@@ -1,10 +1,9 @@
-import React from "react";
-import "./sign-in.css";
+import React from 'react';
+import './sign-in.css';
 
-export function SignIn(props) {
+export function SignIn() {
   return (
     <div>
-
       <div className="main-div">
         <h1>Welcome!</h1>
         <form /*</div>onSubmit={handleSubmit}*/>
@@ -23,13 +22,14 @@ export function SignIn(props) {
               placeholder="Password"
             />
             <br />
-            <a className="forgot-password" href="">Forgot password?</a>
+            <a className="forgot-password" href="#">
+              Forgot password?
+            </a>
           </div>
-
 
           <div className="button-div">
             <button type="submit" className="create-button">
-             Create account
+              Create account
             </button>
             <button type="submit" className="sign-in-button">
               Sign in
