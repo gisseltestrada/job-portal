@@ -28,3 +28,14 @@ export interface NewUserInput {
   role: string | undefined;
   confirmPassword: string | undefined;
 }
+
+export interface ExistingUserInput {
+  email: string | undefined;
+  password: string | undefined;
+}
+
+export interface errorInfo{
+  title: string;
+  message: string;
+  resolution: string;
+}
