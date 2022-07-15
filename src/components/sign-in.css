@@ -1,10 +1,17 @@
-body {
+:root {
+  --main-grey: #c2cad2;
+  --dark-grey: #5e5f62;
+  --light-grey: #e2e2e4;
+  --gold: #b7986f;
+}
+
+/* body {
   background-image: url(../images/background.svg);
   background-repeat: no-repeat;
   background-size: 120%;
   background-position-y: -6rem;
   background-position-x: -6rem;
-}
+} */
 
 .main-div {
   background-color: #c2cad2;
@@ -12,81 +19,85 @@ body {
   height: 33rem;
   border-radius: 8%;
   position: relative;
-  left: 55%;
-  top: 5rem;
+  left: 58%;
+  top: 6rem;
 }
 
-h1 {
+.welcome {
   color: #5e5f62;
   font-size: 1.7rem;
   position: relative;
   top: 0.75rem;
   left: -110px;
+  padding-bottom: 15px;
   padding-top: 10px;
 }
 
-.name-boxes input {
+.sign-in-boxes input {
   margin-top: 15px;
   width: 14.3rem;
   height: 1.85rem;
-}
-
-
-input {
   color: #5e5f62;
   position: relative;
-  left: -45px;
+  left: -49px;
   line-height: 2rem;
   border-style: none;
   border-width: 1.5px;
   border-radius: 20px;
-      padding-left: 14px;
+  padding-left: 14px;
+  text-transform: none;
 }
 
-input::placeholder{
-    color: #c2c2c4;
-    font-size: .8rem;
-      font-weight: 550;
+
+.sign-in-boxes input::placeholder {
+  color: #c2c2c4;
+  font-size: 0.8rem;
+  font-weight: 550;
 }
 
 .forgot-password {
-    font-size: .75rem;
-    color: #5e5f62;
-    margin-right: 200px;
-    margin-top: 4px;
-    margin-bottom: 45px;
-    text-decoration: none;
+  font-size: 0.75rem;
+  color: #5e5f62;
+  margin-right: 200px;
+  margin-top: 4px;
+  margin-bottom: 45px;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-
-button {
-  color: white;
+.button-div button {
   font-weight: 600;
   height: 1.6rem;
   border-radius: 20px;
   border-style: none;
   margin-top: 40px;
   padding-right: 30px;
-  font-size: .75rem;
-  text-align: center;
+  font-size: 0.75rem;
 }
 
 button:hover {
-   cursor: pointer;
+  cursor: pointer;
 }
 
 .create-button {
-    background-color: #b7986f;
-    margin-left: -90px;
-      width: 7.7rem;
-      margin-right: 20px;
-     padding-left: 6px;
+  background-color: #b7986f;
+  margin-left: -90px;
+  width: 7.7rem;
+  margin-right: 20px;
+  padding-left: 6px;
+}
+.create-button a {
+  text-decoration: none;
+  color: white;
 }
 
-
 .sign-in-button {
-    background-color: white;
-    color: #b7986f;
-    width: 6rem;
-    text-align:right;
+  background-color: white;
+  color: #b7986f;
+  width: 6rem;
+  text-align: right;
+}
+
+.handle-error{
+  color: red;
 }

@@ -1,10 +1,10 @@
-body {
+/* body {
   background-image: url(../images/background.svg);
   background-repeat: no-repeat;
   background-size: 120%;
   background-position-y: -6rem;
   background-position-x: -6rem;
-}
+} */
 
 .main-box {
   background-color: white;
@@ -16,7 +16,7 @@ body {
   top: 5rem;
 }
 
-h1{
+.create-account{
     color: #B7986F;
     font-size: 1.70rem;
     position: relative;
@@ -55,8 +55,11 @@ input {
       font-weight: 550;
 } */
 
+/* input:active {
+  text-transform: none;
+} */
 
-button {
+.next-button {
     background-color: #B7986F;
     color: white;
     font-weight:600;
