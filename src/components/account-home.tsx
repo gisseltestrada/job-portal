@@ -1,32 +1,34 @@
-import "./account-home.css";
-import React, { useContext, useState } from "react";
-import { LoginContext, ProfileContext } from "../Helper/context";
-import { Link, Navigate } from "react-router-dom";
-import env from "react-dotenv";
-import SalaryComponent from "./salary-component";
-import axios from "axios";
-import { render } from "@testing-library/react";
-import picture from "../images/raoul-droog-yMSecCHsIBc-unsplash.jpg";
-import { profile } from "console";
+import './account-home.css';
+import React, { useContext, useState } from 'react';
+import { LoginContext, ProfileContext } from '../Helper/context';
+import { Link, Navigate } from 'react-router-dom';
+import env from 'react-dotenv';
+import SalaryComponent from './salary-component';
+import axios from 'axios';
+import { render } from '@testing-library/react';
+import picture from '../images/raoul-droog-yMSecCHsIBc-unsplash.jpg';
+import { profile } from 'console';
+import { SalaryResponse } from '../interfaces/AccountHome';
+import { EditForm } from '../interfaces/EditForm';
 // import { EditUserInput } from "../interfaces/newUser";
 
 export default function AccountHome() {
   const { authorized, setAuthorized } = useContext<any>(LoginContext);
   const apiUrl =
     `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_GET_SALARIES_ENDPOINT}` ||
-    "";
-  const updateUrl = "http://localhost:4200/api/v1/users/updateUser";
-  const idUrl = "http://localhost:4200/api/v1/users/getUserbyId";
-  const [occupancy, setOccupancy] = useState<string>("");
-  const [data, setData] = useState<any>(null);
+    '';
+  const updateUrl = 'http://localhost:4200/api/v1/users/updateUser';
+  const idUrl = 'http://localhost:4200/api/v1/users/getUserbyId';
+  const [occupancy, setOccupancy] = useState<string>('');
+  const [data, setData] = useState<SalaryResponse | null>(null);
   const [error, setError] = useState<any>(null);
-  const [salaries, setSalaries] = useState<any>(null);
-  const [average, setAverage] = useState<any>(null);
+  const [salaries, setSalaries] = useState<number[] | null>(null);
+  const [average, setAverage] = useState<string | null>(null);
   const { profileData, setProfileData } = useContext<any>(ProfileContext);
   const profileId = profileData._id;
   const [edit, setEdit] = useState<any>(false);
-  const [mainPage, setMainPage]= useState<boolean>(true);
-  const [editUser, setEditUser] = useState<any>({
+  const [mainPage, setMainPage] = useState<boolean>(true);
+  const [editUser, setEditUser] = useState<EditForm>({
     _id: profileId,
     email: undefined,
     password: undefined,
@@ -36,11 +38,12 @@ export default function AccountHome() {
     role: undefined,
     salary: undefined,
     occupancy: undefined,
+    company: undefined,
   });
 
-   if (!authorized) {
-     return <Navigate to="/" />;
-   }
+  if (!authorized) {
+    return <Navigate to="/" />;
+  }
 
   const handleJobChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOccupancy(event.target.value);
@@ -78,20 +81,19 @@ export default function AccountHome() {
     } catch (error) {
       setData(null);
       setError({
-        title: "",
-        message: "Job not found. Please try again.",
-        resolution: "PLEASE TRY AGAIN",
+        title: '',
+        message: 'Job not found. Please try again.',
+        resolution: 'PLEASE TRY AGAIN',
       });
       console.log(error);
     }
   };
   const onEdit = (event: any) => {
-    if(!edit){
+    if (!edit) {
       setEdit(true);
     } else {
       setEdit(false);
     }
-    
   };
 
   const onEditSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -116,27 +118,26 @@ export default function AccountHome() {
           _id: _id,
           email: email,
           password: password,
-          "profile.about": about,
-          "profile.address": address,
-          "occupancy.title": title,
-          "occupancy.company": company,
-          "occupancy.salary": salary,
-          "occupancy.role": role,
+          'profile.about': about,
+          'profile.address': address,
+          'occupancy.title': title,
+          'occupancy.company': company,
+          'occupancy.salary': salary,
+          'occupancy.role': role,
         });
-        
-        
+
         if (response.status === 200) {
           console.log(response);
           try {
             const response = await axios.get(idUrl, {
               params: {
-               _id: _id,
+                _id: _id,
               },
             });
             if (response.status === 200) {
               console.log(response);
               setProfileData(response.data.user);
-               setEdit(false);
+              setEdit(false);
               setEditUser({
                 _id: profileId,
                 email: undefined,
@@ -147,14 +148,14 @@ export default function AccountHome() {
                 role: undefined,
                 salary: undefined,
                 occupancy: undefined,
+                company: undefined,
               });
-              
             }
           } catch (error) {
             setError({
-              title: "",
-              message: "Cannot retrieve person. Email not found.",
-              resolution: "may have changed email",
+              title: '',
+              message: 'Cannot retrieve person. Email not found.',
+              resolution: 'may have changed email',
             });
             console.log(error);
           }
@@ -166,12 +167,11 @@ export default function AccountHome() {
         }
       }
     }
-
   };
 
   const logOut = (event: any) => {
     setAuthorized(false);
-     setProfileData(null);
+    setProfileData(null);
   };
 
   const renderSalaries = salaries?.map(
@@ -215,7 +215,7 @@ export default function AccountHome() {
             <li>
               <a
                 href="#"
-                onClick={(event: any) => {
+                onClick={() => {
                   setMainPage(false);
                 }}
               >
@@ -228,7 +228,7 @@ export default function AccountHome() {
             <li>
               <a
                 href="#"
-                onClick={(event: any) => {
+                onClick={() => {
                   setMainPage(true);
                 }}
               >
@@ -278,10 +278,10 @@ export default function AccountHome() {
                   <h2>Salary:{profileData.occupancy.salary}</h2>
                 </div>
                 <div className="job-container">
-                    <h3>Petsmart</h3>
-                    <h4>19601 N 27th ave pheonix, az 85027-4010</h4>
-                    <h2>Salary: 120,000</h2>
-                  </div>
+                  <h3>Petsmart</h3>
+                  <h4>19601 N 27th ave pheonix, az 85027-4010</h4>
+                  <h2>Salary: 120,000</h2>
+                </div>
               </div>
               <div className="skills">
                 <div className="skills-title">
@@ -383,7 +383,7 @@ export default function AccountHome() {
                   <h3>Birthday: {profileData.profile.dob}</h3>
                   <h3>Password: ****** </h3>
                   <h3>Gender: Male</h3>
-                    <h3>Pronouns: He/Him</h3>
+                  <h3>Pronouns: He/Him</h3>
                 </div>
               </div>
             </div>
@@ -549,7 +549,7 @@ export default function AccountHome() {
                       Phone:<span> 123 456 6788</span>
                     </h3>
                     <h3>
-                      Address:{" "}
+                      Address:{' '}
                       <input
                         className="edit-input"
                         type="text"
@@ -559,7 +559,7 @@ export default function AccountHome() {
                       />
                     </h3>
                     <h3>
-                      Email:{" "}
+                      Email:{' '}
                       <span>
                         <input
                           className="edit-input"
@@ -576,9 +576,9 @@ export default function AccountHome() {
                     <h4>Personal information</h4>
                     <h3>Birthday: {profileData.profile.dob}</h3>
                     <h3>
-                      Password:{" "}
+                      Password:{' '}
                       <div>
-                        {" "}
+                        {' '}
                         <input
                           className="edit-input"
                           type="text"
