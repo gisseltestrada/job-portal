@@ -1,3 +1,5 @@
+import SalaryComponent from "../components/salary-component";
+
 export interface NewUserApiRequest {
   email: string;
   password: string;
@@ -28,6 +30,30 @@ export interface NewUserInput {
   role: string | undefined;
   confirmPassword: string | undefined;
 }
+
+// export interface EditUserInput {
+//   _id: string;
+//   email?: string;
+//   password?: string;
+//   // about?: string;
+//   // address?: string;
+//   // title?: string;
+//   // role?: string;
+//   // salary?: number;
+//   // company?: string;
+// }
+// export interface UpdateRequest {
+//   _id: string;
+//   email?: string;
+//   password?: string;
+//   'profile.about'?: string;
+//   'profile.address'?: string;
+//   'occupancy.title'?: string;
+//   'occupancy.role'?: string;
+//   'occupancy.salary'?: number;
+//   'occupancy.company'?: string;
+// }
+
 
 export interface ExistingUserInput {
   email: string | undefined;

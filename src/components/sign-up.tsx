@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./sign-up.css";
 import { NewUserInput } from "../interfaces/newUser";
 import axios from "axios";
-import AccountHome from "./account-home";
 import env from "react-dotenv";
+import { LoginContext, ProfileContext } from "../Helper/context";
+import { Navigate } from "react-router-dom";
 
 const apiUrl =
   `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_CREATE_USER_ENDPOINT}` ||
@@ -24,8 +25,12 @@ export default function SignUp() {
     role: "",
     confirmPassword: "",
   });
-  const [authorize, setAuthorize] = useState(false);
+  const { authorized, setAuthorized } = useContext<any>(LoginContext);
   const [error, setError] = useState<any>(null);
+  const [isValid, setIsValid] = useState<any>(null);
+  const { profileData, setProfileData } = useContext<any>(ProfileContext);
+   const idUrl = "http://localhost:4200/api/v1/users/getUserbyId";
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({
@@ -34,49 +39,45 @@ export default function SignUp() {
     });
   };
 
+  const validate =() => {
+      if (user["password"] != user["confirmPassword"]) {
+        setIsValid(false);
+        setError("Passwords don't match.");
+      } else {
+        setIsValid(true);
+        setError("Passwords match.");
+      }
+  };
+
+  
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     alert("Submitted.");
     console.log(user, apiUrl);
-    const {
-      email,
-      password,
-      firstName,
-      lastName,
-      dob,
-      address,
-      title,
-      company,
-      salary,
-      role,
-      ...filters
-    } = user;
-    // TODO: Create logic to send the JSON body to the api
-    // axios
-    //   .post(apiUrl, {
-    //     email: email,
-    //     password: password,
-    //     profile: {
-    //       name: `${firstName} ${lastName}`,
-    //       dob: dob,
-    //       address: address,
-    //     },
-    //     occupancy: {
-    //       title: title,
-    //       company: company,
-    //       salary: salary,
-    //       role: role,
-    //     },
-    //   })
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+      const {
+     email,
+     password,
+     firstName,
+     lastName,
+     dob,
+     address,
+     title,
+     company,
+     salary,
+     role,
+     confirmPassword,
+   } = user;
+
+     if(user["password"] !== user["confirmPassword"]){
+      console.log("passwords do not match");
+    } else{
+      console.log("passwords match")
+    }
+
     if (user) {
       try {
-        const response = await axios.post(apiUrl, {
+        const firstResponse = await axios.post(apiUrl, {
         email: email,
         password: password,
         profile: {
@@ -91,9 +92,31 @@ export default function SignUp() {
           role: role,
         },
       });
-        if (response.status === 200) {
-         setAuthorize(true);
-         console.log(response);
+        if (firstResponse.status === 200) {
+       
+         console.log(firstResponse);
+         console.log(firstResponse.data.user.insertedId);
+         
+           try {
+             const response = await axios.get(idUrl, {
+               params: {
+                 _id: firstResponse.data.user.insertedId,
+               },
+             });
+             if (response.status === 200) {
+               console.log(response);
+                   setAuthorized(true);
+               setProfileData(response.data.user);
+          
+             }
+           } catch (error) {
+             setError({
+               title: "",
+               message: "Cannot retrieve person.ID not found.",
+               resolution: "",
+             });
+             console.log(error);
+           }
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -104,9 +127,12 @@ export default function SignUp() {
     } 
   };
 
+  if (authorized) {
+    return <Navigate to="/accounthome" />;
+  }
+
   return (
-    <div>
-      {authorize === false && (
+    <div className="sign-in-background">
         <div className="main-box">
           <h1 className="create-account">Create Account</h1>
           <form onSubmit={onSubmit}>
@@ -115,14 +141,14 @@ export default function SignUp() {
                 className="input-boxes1"
                 type="text"
                 name="firstName"
-                placeholder="first name"
+                placeholder="FIRST NAME"
                 onChange={handleChange}
               />
               <input
                 className="input-boxes2"
                 type="text"
                 name="lastName"
-                placeholder="last name"
+                placeholder="LAST NAME"
                 onChange={handleChange}
               />
             </div>
@@ -132,7 +158,7 @@ export default function SignUp() {
                 type="text"
                 name="email"
                 id="email"
-                placeholder="e-mail"
+                placeholder="E-MAIL"
                 onChange={handleChange}
                 required
               />
@@ -143,7 +169,7 @@ export default function SignUp() {
                 type="text"
                 name="dob"
                 id="dob"
-                placeholder="date of birth 00/00/0000"
+                placeholder="DARE OF BIRTH 00/00/0000"
                 onChange={handleChange}
                 required
               />
@@ -154,7 +180,7 @@ export default function SignUp() {
                 type="text"
                 name="address"
                 id="address"
-                placeholder="address"
+                placeholder="ADDRESS"
                 onChange={handleChange}
                 required
               />
@@ -165,7 +191,7 @@ export default function SignUp() {
                 type="text"
                 name="title"
                 id="job-title"
-                placeholder="job title"
+                placeholder="JOB TITLE"
                 onChange={handleChange}
                 required
               />
@@ -176,7 +202,7 @@ export default function SignUp() {
                 type="text"
                 name="company"
                 id="company-employed"
-                placeholder="company employed"
+                placeholder="COMPANY EMPLOYED"
                 onChange={handleChange}
                 required
               />
@@ -187,7 +213,7 @@ export default function SignUp() {
                 type="text"
                 name="role"
                 id="role"
-                placeholder="role"
+                placeholder="ROLE"
                 onChange={handleChange}
                 required
               />
@@ -198,7 +224,7 @@ export default function SignUp() {
                 type="number"
                 name="salary"
                 id="salary"
-                placeholder="salary"
+                placeholder="SALARY"
                 onChange={handleChange}
                 required
               />
@@ -209,8 +235,9 @@ export default function SignUp() {
                 type="text"
                 name="password"
                 id="password"
-                placeholder="password"
+                placeholder="PASSWORD"
                 onChange={handleChange}
+                onKeyUp={validate}
                 required
               />
             </section>
@@ -219,20 +246,25 @@ export default function SignUp() {
                 type="text"
                 name="confirmPassword"
                 id="confirm-password"
-                placeholder="confirm password"
+                placeholder="CONFIRM PASSWORD"
                 onChange={handleChange}
+                onKeyUp={validate}
                 required
               />
+              {!isValid && <span>{error}</span>}
             </section>
 
-            <button type="submit" className="next-button">
+            <button
+              type="submit"
+              className="next-button"
+              id="disabled"
+              disabled={!isValid}
+            >
               Next
             </button>
           </form>
         </div>
-      )}
-
-      <div>{authorize && <AccountHome />}</div>
+      
     </div>
   );
 }

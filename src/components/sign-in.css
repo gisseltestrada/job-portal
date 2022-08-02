@@ -5,13 +5,6 @@
   --gold: #b7986f;
 }
 
-/* body {
-  background-image: url(../images/background.svg);
-  background-repeat: no-repeat;
-  background-size: 120%;
-  background-position-y: -6rem;
-  background-position-x: -6rem;
-} */
 
 .main-div {
   background-color: #c2cad2;
@@ -47,7 +40,6 @@
   padding-left: 14px;
   text-transform: none;
 }
-
 
 .sign-in-boxes input::placeholder {
   color: #c2c2c4;
@@ -91,13 +83,17 @@ button:hover {
   color: white;
 }
 
+.sign-in-button a {
+  text-decoration: none;
+  color: #b7986f;
+}
+
 .sign-in-button {
   background-color: white;
-  color: #b7986f;
   width: 6rem;
   text-align: right;
 }
 
-.handle-error{
+.handle-error {
   color: red;
 }
