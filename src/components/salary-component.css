@@ -1,0 +1,78 @@
+ .job-header{
+    color: rgb(86, 86, 86);
+  font-size: 3.25rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+.company-name{
+   
+}
+
+.job-name{
+    color: rgb(86, 86, 86);
+  font-size: 1.6rem;
+  padding-top: 1.8rem;
+  padding-bottom: .4rem;
+      text-align: center;
+    margin-left: -45rem;
+}
+
+.company-name span{
+    font-weight: 200;
+    font-size: 1.3rem;
+
+}
+
+ .salary-grid{
+    /* display: inline-grid;
+    grid-template-areas: "high high average average low low"
+    "left left left right right right"; */
+    display: grid;
+    grid-template-columns: 260px 260px 260px;
+    grid-template-rows: 150px 300px;
+    gap: 10px 10px;
+    justify-content: center;
+}
+
+.salary-grid p {
+    font-weight: 200;
+    font-size: 1rem;
+    color: rgb(86, 86, 86);
+    text-align: center;
+    margin-top: 40px;
+    
+}
+
+.salary-grid h2{
+    color: rgb(86, 86, 86);
+  font-size: 2rem;
+  text-align: center;
+margin-top: -15px;
+}
+
+.high, .average, .low, .right, .left{
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 12px;
+    background-color: rgb(255, 255, 255);
+}
+
+.left{
+    grid-column: span 2;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.high {
+     border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.right, .low{
+     border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+/* .salary-titles{
+     color: rgb(86, 86, 86);
+     font-weight: 200;
+    font-size: 1.3rem;
+} */
+

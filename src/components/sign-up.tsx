@@ -9,7 +9,6 @@ import { Navigate } from "react-router-dom";
 const apiUrl =
   `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_CREATE_USER_ENDPOINT}` ||
   "";
-// const apiUrl = "http://localhost:4200/api/v1/users/createNewUser";
 
 export default function SignUp() {
   const [user, setUser] = useState<NewUserInput>({
@@ -27,9 +26,11 @@ export default function SignUp() {
   });
   const { authorized, setAuthorized } = useContext<any>(LoginContext);
   const [error, setError] = useState<any>(null);
-  const [isValid, setIsValid] = useState<any>(null);
+  const [isValid, setIsValid] = useState<boolean | null>(null);
   const { profileData, setProfileData } = useContext<any>(ProfileContext);
-   const idUrl = "http://localhost:4200/api/v1/users/getUserbyId";
+   const idUrl = 
+    `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_GET_USER_BY_ID_ENDPOINT}` ||
+    "";
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,7 +170,7 @@ export default function SignUp() {
                 type="text"
                 name="dob"
                 id="dob"
-                placeholder="DARE OF BIRTH 00/00/0000"
+                placeholder="DATE OF BIRTH 00/00/0000"
                 onChange={handleChange}
                 required
               />

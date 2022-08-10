@@ -6,8 +6,10 @@ import env from "react-dotenv";
 import SalaryComponent from "./salary-component";
 import axios from "axios";
 import { render } from "@testing-library/react";
-import picture from "../images/raoul-droog-yMSecCHsIBc-unsplash.jpg";
+import picture from "../images/catnoir.jpeg";
 import { profile } from "console";
+import { getNameOfDeclaration, getNodeMajorVersion } from "typescript";
+import { ProfileResponse, SalaryResponse } from "../interfaces/AccountHome";
 // import { EditUserInput } from "../interfaces/newUser";
 
 export default function AccountHome() {
@@ -15,18 +17,21 @@ export default function AccountHome() {
   const apiUrl =
     `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_GET_SALARIES_ENDPOINT}` ||
     "";
-  const updateUrl = "http://localhost:4200/api/v1/users/updateUser";
-  const idUrl = "http://localhost:4200/api/v1/users/getUserbyId";
+  const updateUrl =
+    `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_UPDATE_USER_ENDPOINT}` || "";
+  const idUrl =
+    `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_GET_USER_BY_ID_ENDPOINT}` ||
+    "";
   const [occupancy, setOccupancy] = useState<string>("");
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<SalaryResponse | null >(null);
   const [error, setError] = useState<any>(null);
-  const [salaries, setSalaries] = useState<any>(null);
-  const [average, setAverage] = useState<any>(null);
+  const [salaries, setSalaries] = useState<number[] | null>(null);
+  const [average, setAverage] = useState<string | null>(null);
   const { profileData, setProfileData } = useContext<any>(ProfileContext);
   const profileId = profileData._id;
-  const [edit, setEdit] = useState<any>(false);
-  const [mainPage, setMainPage]= useState<boolean>(true);
-  const [editUser, setEditUser] = useState<any>({
+  const [edit, setEdit] = useState<boolean>(false);
+  const [mainPage, setMainPage] = useState<boolean>(true);
+  const [editUser, setEditUser] = useState<ProfileResponse>({
     _id: profileId,
     email: undefined,
     password: undefined,
@@ -35,12 +40,28 @@ export default function AccountHome() {
     title: undefined,
     role: undefined,
     salary: undefined,
-    occupancy: undefined,
+    // occupancy: undefined,
+    company: undefined,
+    location: undefined,
+    city: undefined,
+    experience: undefined,
+    phone: undefined,
+    site: undefined,
+    gender: undefined,
+    pronouns: undefined,
+    skill1: undefined,
+    skill2: undefined,
+    skill3: undefined,
+    skill4: undefined,
+    skill5: undefined,
+    prevcompany: undefined,
+    prevlocation: undefined,
+    prevsalary: undefined
   });
 
-   if (!authorized) {
-     return <Navigate to="/" />;
-   }
+  if (!authorized) {
+    return <Navigate to="/" />;
+  }
 
   const handleJobChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOccupancy(event.target.value);
@@ -68,11 +89,6 @@ export default function AccountHome() {
         setData(response.data);
         setAverage(response.data.user.average);
         setSalaries(response.data.user.salaries);
-        // const tempSalaries = [];
-        // for (const person of response.data.user) {
-        //   tempSalaries.push(person.occupancy.salary);
-        // }
-        // setSalaries(tempSalaries);
         console.log(response);
       }
     } catch (error) {
@@ -85,13 +101,12 @@ export default function AccountHome() {
       console.log(error);
     }
   };
-  const onEdit = (event: any) => {
-    if(!edit){
+  const onEdit = () => {
+    if (!edit) {
       setEdit(true);
     } else {
       setEdit(false);
     }
-    
   };
 
   const onEditSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -107,6 +122,21 @@ export default function AccountHome() {
       role,
       salary,
       company,
+      location,
+      city,
+      experience,
+      phone,
+      site,
+      gender,
+      pronouns,
+      skill1,
+      skill2,
+      skill3,
+      skill4,
+      skill5,
+      prevcompany,
+      prevlocation,
+      prevsalary,
     } = editUser;
 
     //PUT request for infomation change
@@ -122,21 +152,35 @@ export default function AccountHome() {
           "occupancy.company": company,
           "occupancy.salary": salary,
           "occupancy.role": role,
+          "occupancy.location": location,
+          city: city,
+          experience: experience,
+          phone: phone,
+          site: site,
+          gender: gender,
+          pronouns: pronouns,
+          "skills.skill1": skill1,
+          "skills.skill2": skill2,
+          "skills.skill3": skill3,
+          "skills.skill4": skill4,
+          "skills.skill5": skill5,
+          "previous.prevcompany": prevcompany,
+          "previous.prevlocation": prevlocation,
+          "previous.prevsalary": prevsalary,
         });
-        
-        
+
         if (response.status === 200) {
           console.log(response);
           try {
             const response = await axios.get(idUrl, {
               params: {
-               _id: _id,
+                _id: _id,
               },
             });
             if (response.status === 200) {
               console.log(response);
               setProfileData(response.data.user);
-               setEdit(false);
+              setEdit(false);
               setEditUser({
                 _id: profileId,
                 email: undefined,
@@ -146,9 +190,24 @@ export default function AccountHome() {
                 title: undefined,
                 role: undefined,
                 salary: undefined,
-                occupancy: undefined,
+                // occupancy: undefined,
+                company: undefined,
+                location: undefined,
+                city: undefined,
+                experience: undefined,
+                phone: undefined,
+                site: undefined,
+                gender: undefined,
+                pronouns: undefined,
+                skill1: undefined,
+                skill2: undefined,
+                skill3: undefined,
+                skill4: undefined,
+                skill5: undefined,
+                prevcompany: undefined,
+                prevlocation: undefined,
+                prevsalary: undefined,
               });
-              
             }
           } catch (error) {
             setError({
@@ -166,22 +225,21 @@ export default function AccountHome() {
         }
       }
     }
-
   };
 
   const logOut = (event: any) => {
     setAuthorized(false);
-     setProfileData(null);
+    setProfileData(null);
   };
 
-  const renderSalaries = salaries?.map(
-    (salary: number, index: React.Key | null | undefined) => {
-      return (
-        // eslint-disable-next-line react/jsx-key
-        <SalaryComponent salary={salary} key={index} />
-      );
-    }
-  );
+  // const renderSalaries = salaries?.map(
+  //   (salary: number, index: React.Key | null | undefined) => {
+  //     return (
+  //       // eslint-disable-next-line react/jsx-key
+  //       <SalaryComponent salary={salary} key={index} />
+  //     );
+  //   }
+  // );
 
   return (
     <div>
@@ -215,7 +273,7 @@ export default function AccountHome() {
             <li>
               <a
                 href="#"
-                onClick={(event: any) => {
+                onClick={() => {
                   setMainPage(false);
                 }}
               >
@@ -228,7 +286,7 @@ export default function AccountHome() {
             <li>
               <a
                 href="#"
-                onClick={(event: any) => {
+                onClick={() => {
                   setMainPage(true);
                 }}
               >
@@ -245,11 +303,6 @@ export default function AccountHome() {
                 Log Out
               </Link>
             </li>
-            {/* <li>
-              <button type="submit" className="logout-button" onClick={logOut}>
-                <Link to="/">Logout</Link>
-              </button>
-            </li> */}
           </ul>
         </nav>
       </header>
@@ -257,11 +310,13 @@ export default function AccountHome() {
         <div>
           <div className="profile">
             <div className="column-one">
-              <img
-                className="cat-image"
-                src={picture}
-                alt="cat in sunglasses"
-              />
+              <div className="img-div">
+                <img
+                  className="cat-image"
+                  src={picture}
+                  alt="cat in sunglasses"
+                />
+              </div>
               <div className="work">
                 <div className="work-container">
                   <h4>Work</h4>
@@ -271,17 +326,18 @@ export default function AccountHome() {
                 </div>
                 <div className="job-container">
                   <h3>{profileData.occupancy.company}</h3>
-                  <h4>
-                    1600 Ampitheatre parkway mountain view, Ca 94043
-                    650-253-0000
-                  </h4>
-                  <h2>Salary:{profileData.occupancy.salary}</h2>
+                  <h4>{profileData.occupancy.location}</h4>
+                  <h2>Salary:{" " + profileData.occupancy.salary}</h2>
                 </div>
                 <div className="job-container">
-                    <h3>Petsmart</h3>
-                    <h4>19601 N 27th ave pheonix, az 85027-4010</h4>
-                    <h2>Salary: 120,000</h2>
-                  </div>
+                  <h3>{profileData.previous?.prevcompany}</h3>
+                  <h4>{profileData.previous?.prevlocation}</h4>
+                  <h2>
+                    {profileData.previous?.prevsalary
+                      ? "Salary: " + profileData.previous.prevsalary
+                      : ""}
+                  </h2>
+                </div>
               </div>
               <div className="skills">
                 <div className="skills-title">
@@ -293,19 +349,19 @@ export default function AccountHome() {
 
                 <ul>
                   <li>
-                    <h3>Eating</h3>
+                    <h3>{profileData.skills?.skill1}</h3>
                   </li>
                   <li>
-                    <h3>Naps</h3>
+                    <h3>{profileData.skills?.skill2}</h3>
                   </li>
                   <li>
-                    <h3>Web-Design</h3>
+                    <h3>{profileData.skills?.skill3}</h3>
                   </li>
                   <li>
-                    <h3>UI/UX</h3>
+                    <h3>{profileData.skills?.skill4}</h3>
                   </li>
                   <li>
-                    <h3>Sun Nap</h3>
+                    <h3>{profileData.skills?.skill5}</h3>
                   </li>
                 </ul>
               </div>
@@ -323,13 +379,13 @@ export default function AccountHome() {
                     >
                       <path d="M12,2a8.009,8.009,0,0,0-8,8c0,3.255,2.363,5.958,4.866,8.819,0.792,0.906,1.612,1.843,2.342,2.791a1,1,0,0,0,1.584,0c0.73-.948,1.55-1.885,2.342-2.791C17.637,15.958,20,13.255,20,10A8.009,8.009,0,0,0,12,2Zm0,11a3,3,0,1,1,3-3A3,3,0,0,1,12,13Z" />
                     </svg>
-                    <h4 className="location">Dallas, TX</h4>
+                    <h4 className="location">{profileData.city}</h4>
                   </div>
                 </div>
 
                 <div className="profile-description-container">
                   <h3>{profileData.occupancy.title}</h3>
-                  <h4>7 years Experience</h4>
+                  <h4>{profileData.experience} years Experience</h4>
                 </div>
               </div>
               <div className="bio-container">
@@ -370,20 +426,23 @@ export default function AccountHome() {
                 <div className="contact-container">
                   <h4>Contact information</h4>
                   <h3>
-                    Phone:<span> 123 456 6788</span>
+                    Phone:
+                    <span>
+                      {profileData.phone ? " " + profileData.phone : ""}
+                    </span>
                   </h3>
                   <h3>Address: {profileData.profile.address}</h3>
                   <h3>
                     Email: <span>{profileData.email}</span>
                   </h3>
-                  <h3>Site: </h3>
+                  <h3>Site: {profileData.site}</h3>
                 </div>
                 <div className="personal-container">
                   <h4>Personal information</h4>
                   <h3>Birthday: {profileData.profile.dob}</h3>
                   <h3>Password: ****** </h3>
-                  <h3>Gender: Male</h3>
-                    <h3>Pronouns: He/Him</h3>
+                  <h3>Gender: {profileData.gender}</h3>
+                  <h3>Pronouns: {profileData.pronouns}</h3>
                 </div>
               </div>
             </div>
@@ -418,8 +477,17 @@ export default function AccountHome() {
                       />
                     </h3>
                     <h4>
-                      1600 Ampitheatre parkway mountain view, Ca 94043
-                      650-253-0000
+                      <input
+                        className="edit-input"
+                        type="text"
+                        name="location"
+                        placeholder={
+                          profileData.occupancy.location
+                            ? profileData.occupancy.location
+                            : "company location"
+                        }
+                        onChange={handleChange}
+                      />
                     </h4>
                     <h2 className="salary-edit">
                       Salary:
@@ -434,11 +502,50 @@ export default function AccountHome() {
                       </span>
                     </h2>
                   </div>
-                  {/* <div className="job-container">
-                      <h3>Petsmart</h3>
-                      <h4>19601 N 27th ave pheonix, az 85027-4010</h4>
-                      <h2>Salary: 120,000</h2>
-                    </div> */}
+                  <div className="job-container">
+                    <h3>
+                      <input
+                        className="edit-input"
+                        type="text"
+                        name="prevcompany"
+                        placeholder={
+                          profileData.previous?.prevcompany
+                            ? profileData.previous.prevcompany
+                            : "previous company name"
+                        }
+                        onChange={handleChange}
+                      />
+                    </h3>
+                    <h4>
+                      <input
+                        className="edit-input"
+                        type="text"
+                        name="prevlocation"
+                        placeholder={
+                          profileData.previous?.prevlocation
+                            ? profileData.previous.prevlocation
+                            : "previous company location"
+                        }
+                        onChange={handleChange}
+                      />
+                    </h4>
+                    <h2 className="salary-edit">
+                      Salary:
+                      <span>
+                        <input
+                          className="salary-input"
+                          type="number"
+                          name="prevsalary"
+                          placeholder={
+                            profileData.previous?.prevsalary
+                              ? profileData.previous.prevsalary
+                              : "previous salary"
+                          }
+                          onChange={handleChange}
+                        />
+                      </span>
+                    </h2>
+                  </div>
                 </div>
                 <div className="skills">
                   <div className="skills-title">
@@ -450,19 +557,63 @@ export default function AccountHome() {
 
                   <ul>
                     <li>
-                      <h3>Eating</h3>
+                      <h3>
+                        <input
+                          className="edit-input"
+                          type="text"
+                          name="skill1"
+                          placeholder={profileData.skills?.skill1}
+                          onChange={handleChange}
+                        />
+                      </h3>
                     </li>
                     <li>
-                      <h3>Naps</h3>
+                      <h3>
+                        {" "}
+                        <input
+                          className="edit-input"
+                          type="text"
+                          name="skill2"
+                          placeholder={profileData.skills?.skill2}
+                          onChange={handleChange}
+                        />
+                      </h3>
                     </li>
                     <li>
-                      <h3>Web-Design</h3>
+                      <h3>
+                        {" "}
+                        <input
+                          className="edit-input"
+                          type="text"
+                          name="skill3"
+                          placeholder={profileData.skills?.skill3}
+                          onChange={handleChange}
+                        />
+                      </h3>
                     </li>
                     <li>
-                      <h3>UI/UX</h3>
+                      <h3>
+                        {" "}
+                        <input
+                          className="edit-input"
+                          type="text"
+                          name="skill4"
+                          placeholder={profileData.skills?.skill4}
+                          onChange={handleChange}
+                        />
+                      </h3>
                     </li>
                     <li>
-                      <h3>Sun Nap</h3>
+                      <h3>
+                        {" "}
+                        <input
+                          className="edit-input"
+                          type="text"
+                          name="skill5"
+                          placeholder={profileData.skills?.skill5}
+                          onChange={handleChange}
+                        />
+                      </h3>
                     </li>
                   </ul>
                 </div>
@@ -480,7 +631,17 @@ export default function AccountHome() {
                       >
                         <path d="M12,2a8.009,8.009,0,0,0-8,8c0,3.255,2.363,5.958,4.866,8.819,0.792,0.906,1.612,1.843,2.342,2.791a1,1,0,0,0,1.584,0c0.73-.948,1.55-1.885,2.342-2.791C17.637,15.958,20,13.255,20,10A8.009,8.009,0,0,0,12,2Zm0,11a3,3,0,1,1,3-3A3,3,0,0,1,12,13Z" />
                       </svg>
-                      <h4 className="location">Dallas, TX</h4>
+                      <h4 className="location">
+                        <input
+                          className="city-input"
+                          type="text"
+                          name="city"
+                          placeholder={
+                            profileData.city ? profileData.city : "city, state"
+                          }
+                          onChange={handleChange}
+                        />
+                      </h4>
                     </div>
                   </div>
 
@@ -488,13 +649,25 @@ export default function AccountHome() {
                     <h3>
                       <input
                         className="title-input"
-                        type="text"
+                        type="string"
                         name="title"
                         placeholder={profileData.occupancy.title}
                         onChange={handleChange}
                       />
                     </h3>
-                    <h4>7 years Experience</h4>
+                    <h4>
+                      <input
+                        className="salary-input"
+                        type="number"
+                        name="experience"
+                        placeholder={
+                          profileData.experience
+                            ? profileData.experience + " years Experience"
+                            : "years of experience"
+                        }
+                        onChange={handleChange}
+                      />
+                    </h4>
                   </div>
                 </div>
                 <div className="bio-container">
@@ -546,7 +719,17 @@ export default function AccountHome() {
                   <div className="contact-container">
                     <h4>Contact information</h4>
                     <h3>
-                      Phone:<span> 123 456 6788</span>
+                      Phone:
+                      <span>
+                        {" "}
+                        <input
+                          className="edit-input"
+                          type="number"
+                          name="phone"
+                          placeholder={profileData.phone}
+                          onChange={handleChange}
+                        />
+                      </span>
                     </h3>
                     <h3>
                       Address:{" "}
@@ -570,7 +753,19 @@ export default function AccountHome() {
                         />
                       </span>
                     </h3>
-                    <h3>Site: </h3>
+                    <h3>
+                      {" "}
+                      Site:{" "}
+                      <span>
+                        <input
+                          className="edit-input"
+                          type="text"
+                          name="site"
+                          placeholder={profileData.site}
+                          onChange={handleChange}
+                        />
+                      </span>{" "}
+                    </h3>
                   </div>
                   <div className="personal-container">
                     <h4>Personal information</h4>
@@ -580,7 +775,7 @@ export default function AccountHome() {
                       <div>
                         {" "}
                         <input
-                          className="edit-input"
+                          className="salary-input"
                           type="text"
                           name="password"
                           placeholder={profileData.password}
@@ -588,8 +783,30 @@ export default function AccountHome() {
                         />
                       </div>
                     </h3>
-                    {/* <h3>Gender: Male</h3>
-                      <h3>Pronouns: He/Him</h3> */}
+                    <h3>
+                      Gender:{" "}
+                      <span>
+                        <input
+                          className="salary-input"
+                          type="text"
+                          name="gender"
+                          placeholder={profileData.gender}
+                          onChange={handleChange}
+                        />
+                      </span>
+                    </h3>
+                    <h3>
+                      Pronouns:{" "}
+                      <span>
+                        <input
+                          className="salary-input"
+                          type="text"
+                          name="pronouns"
+                          placeholder={profileData.pronouns}
+                          onChange={handleChange}
+                        />
+                      </span>
+                    </h3>
                   </div>
                   <button type="submit" className="submit-edit">
                     Change information
@@ -602,17 +819,25 @@ export default function AccountHome() {
       )}
 
       <div>
-        {!mainPage && (
-          <div>
-            <h2>Average Salary</h2>
-            {data && <p>{average}</p>}
-            <h3>List of Salaries</h3>
-            {data && <div>{renderSalaries}</div>}
-          </div>
+        {!mainPage && data && (
+          <SalaryComponent
+            salaries={salaries}
+            average={average}
+            company={profileData.occupancy.company}
+            occupancy={occupancy}
+          />
         )}
-        {error && !mainPage && (
+        {!mainPage && !data && (
+          <SalaryComponent
+            salaries={null}
+            average={null}
+            occupancy={null}
+            company={null}
+          />
+        )}
+        {/* {error && !mainPage && (
           <div className="salary-error">{error.message}</div>
-        )}
+        )} */}
         {/* {data && <SalaryComponent salary={salaries} average={average} />} */}
       </div>
     </div>

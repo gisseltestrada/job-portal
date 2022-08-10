@@ -103,7 +103,9 @@ h4{
   width: 19rem;
   padding-right:3rem;
 }
-
+.img-div{
+  
+}
 .cat-image{
   width: 80%;
   border-radius: 15px;
@@ -126,6 +128,10 @@ h4{
 .job-container h4{
   width: 15rem;
   line-height: 1rem;
+}
+
+.skills {
+  margin-bottom: 5.5rem;
 }
 .skills-title span hr{
   width:67%;
@@ -265,6 +271,7 @@ h4{
     text-decoration: none;
     background: none;
     margin-left: 9.7rem;
+    margin-bottom: 5.5rem;
 }
 
 
@@ -273,16 +280,28 @@ h4{
 }
 
 .edit-input{
-  max-width: 20rem;
+  max-width: 18.5rem;
   border: 1.5px solid var(--light-grey);
 }
-
+.city-input{
+  max-width: 7rem;
+  border: 1.5px solid var(--light-grey);
+  margin-bottom: 5px;
+}
 .salary-input, .title-input{
-   max-width: 10rem;
+   max-width: 9rem;
    border: 1px solid var(--light-grey);
    margin: 5px;
 }
-.salary-input::placeholder, .title-input::placeholder,.edit-input::placeholder{
+.salary-input::placeholder, .title-input::placeholder,.edit-input::placeholder,.city-input::placeholder{
 color: rgb(178, 178, 178);
-padding-left: 5px;
+}
+
+/* .salary-input input, .title-input input,.edit-input input,.city-input input{
+
+margin-left: 5px;
+} */
+
+.profile input{
+padding-left: 8px;
 }
