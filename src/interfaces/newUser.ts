@@ -1,5 +1,3 @@
-import SalaryComponent from "../components/salary-component";
-
 export interface NewUserApiRequest {
   email: string;
   password: string;
@@ -54,13 +52,12 @@ export interface NewUserInput {
 //   'occupancy.company'?: string;
 // }
 
-
 export interface ExistingUserInput {
   email: string | undefined;
   password: string | undefined;
 }
 
-export interface errorInfo{
+export interface errorInfo {
   title: string;
   message: string;
   resolution: string;

@@ -94,9 +94,9 @@ export default function AccountHome() {
     } catch (error) {
       setData(null);
       setError({
-        title: "",
-        message: "Job not found. Please try again.",
-        resolution: "PLEASE TRY AGAIN",
+        title: '',
+        message: 'Job not found. Please try again.',
+        resolution: 'PLEASE TRY AGAIN',
       });
       console.log(error);
     }
@@ -211,9 +211,9 @@ export default function AccountHome() {
             }
           } catch (error) {
             setError({
-              title: "",
-              message: "Cannot retrieve person. Email not found.",
-              resolution: "may have changed email",
+              title: '',
+              message: 'Cannot retrieve person. Email not found.',
+              resolution: 'may have changed email',
             });
             console.log(error);
           }
@@ -732,7 +732,7 @@ export default function AccountHome() {
                       </span>
                     </h3>
                     <h3>
-                      Address:{" "}
+                      Address:{' '}
                       <input
                         className="edit-input"
                         type="text"
@@ -742,7 +742,7 @@ export default function AccountHome() {
                       />
                     </h3>
                     <h3>
-                      Email:{" "}
+                      Email:{' '}
                       <span>
                         <input
                           className="edit-input"
@@ -771,9 +771,9 @@ export default function AccountHome() {
                     <h4>Personal information</h4>
                     <h3>Birthday: {profileData.profile.dob}</h3>
                     <h3>
-                      Password:{" "}
+                      Password:{' '}
                       <div>
-                        {" "}
+                        {' '}
                         <input
                           className="salary-input"
                           type="text"
