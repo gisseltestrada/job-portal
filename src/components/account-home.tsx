@@ -38,8 +38,8 @@ export default function AccountHome() {
     ...profileData,
   });
   const [editUser, setEditUser] = useState<EditForm>({
+    ...INIT_FORM,
     _id: profileId,
-    ...profileData,
   });
 
   if (!authorized) {
@@ -97,6 +97,7 @@ export default function AccountHome() {
     console.log(editUser, updateUrl);
     const { _id, skill1, skill2, skill3, skill4, skill5, ...otherfields } =
       editUser;
+    console.log(otherfields);
 
     const skills = { skill1, skill2, skill3, skill4, skill5 };
     const currentSkills = user?.skills;
