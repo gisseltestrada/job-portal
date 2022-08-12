@@ -1,29 +1,31 @@
-import "./account-home.css";
-import React, { useContext, useState } from "react";
-import { LoginContext, ProfileContext } from "../Helper/context";
-import { Link, Navigate } from "react-router-dom";
-import env from "react-dotenv";
-import SalaryComponent from "./salary-component";
-import axios from "axios";
-import { render } from "@testing-library/react";
-import picture from "../images/catnoir.jpeg";
-import { profile } from "console";
-import { getNameOfDeclaration, getNodeMajorVersion } from "typescript";
-import { ProfileResponse, SalaryResponse } from "../interfaces/AccountHome";
-// import { EditUserInput } from "../interfaces/newUser";
+import './account-home.css';
+import React, { useContext, useState } from 'react';
+import { LoginContext, ProfileContext } from '../Helper/context';
+import { Link, Navigate } from 'react-router-dom';
+import env from 'react-dotenv';
+import SalaryComponent from './salary-component';
+import axios from 'axios';
+import picture from '../images/catnoir.jpeg';
+import {
+  EditForm,
+  INIT_FORM,
+  SalaryResponse,
+  User,
+} from '../interfaces/AccountHome';
 
 export default function AccountHome() {
   const { authorized, setAuthorized } = useContext<any>(LoginContext);
   const apiUrl =
     `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_GET_SALARIES_ENDPOINT}` ||
-    "";
+    '';
   const updateUrl =
-    `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_UPDATE_USER_ENDPOINT}` || "";
+    `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_UPDATE_USER_ENDPOINT}` ||
+    '';
   const idUrl =
     `${env.REACT_APP_JOB_PORTAL_URL}${env.REACT_APP_GET_USER_BY_ID_ENDPOINT}` ||
-    "";
-  const [occupancy, setOccupancy] = useState<string>("");
-  const [data, setData] = useState<SalaryResponse | null >(null);
+    '';
+  const [occupancy, setOccupancy] = useState<string>('');
+  const [data, setData] = useState<SalaryResponse | null>(null);
   const [error, setError] = useState<any>(null);
   const [salaries, setSalaries] = useState<number[] | null>(null);
   const [average, setAverage] = useState<string | null>(null);
@@ -31,32 +33,13 @@ export default function AccountHome() {
   const profileId = profileData._id;
   const [edit, setEdit] = useState<boolean>(false);
   const [mainPage, setMainPage] = useState<boolean>(true);
-  const [editUser, setEditUser] = useState<ProfileResponse>({
+  const [user, setUser] = useState<User | undefined>({
     _id: profileId,
-    email: undefined,
-    password: undefined,
-    about: undefined,
-    address: undefined,
-    title: undefined,
-    role: undefined,
-    salary: undefined,
-    // occupancy: undefined,
-    company: undefined,
-    location: undefined,
-    city: undefined,
-    experience: undefined,
-    phone: undefined,
-    site: undefined,
-    gender: undefined,
-    pronouns: undefined,
-    skill1: undefined,
-    skill2: undefined,
-    skill3: undefined,
-    skill4: undefined,
-    skill5: undefined,
-    prevcompany: undefined,
-    prevlocation: undefined,
-    prevsalary: undefined
+    ...profileData,
+  });
+  const [editUser, setEditUser] = useState<EditForm>({
+    _id: profileId,
+    ...profileData,
   });
 
   if (!authorized) {
@@ -112,61 +95,32 @@ export default function AccountHome() {
   const onEditSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(editUser, updateUrl);
-    const {
-      _id,
-      email,
-      password,
-      about,
-      address,
-      title,
-      role,
-      salary,
-      company,
-      location,
-      city,
-      experience,
-      phone,
-      site,
-      gender,
-      pronouns,
-      skill1,
-      skill2,
-      skill3,
-      skill4,
-      skill5,
-      prevcompany,
-      prevlocation,
-      prevsalary,
-    } = editUser;
+    const { _id, skill1, skill2, skill3, skill4, skill5, ...otherfields } =
+      editUser;
+
+    const skills = { skill1, skill2, skill3, skill4, skill5 };
+    const currentSkills = user?.skills;
+
+    const toUpdate: any = { ...otherfields };
+    for (const key of Object.keys(toUpdate)) {
+      if (toUpdate[key] === '' || toUpdate[key] === undefined) {
+        delete toUpdate[key];
+      }
+    }
+    for (const key of Object.keys(skills)) {
+      if ((skills[key] === undefined || skills[key]) === '') {
+        delete skills[key];
+      }
+    }
 
     //PUT request for infomation change
     if (editUser) {
       try {
         const response = await axios.put(updateUrl, {
-          _id: _id,
-          email: email,
-          password: password,
-          "profile.about": about,
-          "profile.address": address,
-          "occupancy.title": title,
-          "occupancy.company": company,
-          "occupancy.salary": salary,
-          "occupancy.role": role,
-          "occupancy.location": location,
-          city: city,
-          experience: experience,
-          phone: phone,
-          site: site,
-          gender: gender,
-          pronouns: pronouns,
-          "skills.skill1": skill1,
-          "skills.skill2": skill2,
-          "skills.skill3": skill3,
-          "skills.skill4": skill4,
-          "skills.skill5": skill5,
-          "previous.prevcompany": prevcompany,
-          "previous.prevlocation": prevlocation,
-          "previous.prevsalary": prevsalary,
+          ...toUpdate,
+          skills,
+          currentSkills,
+          _id,
         });
 
         if (response.status === 200) {
@@ -180,34 +134,9 @@ export default function AccountHome() {
             if (response.status === 200) {
               console.log(response);
               setProfileData(response.data.user);
+              setUser(response.data.user);
               setEdit(false);
-              setEditUser({
-                _id: profileId,
-                email: undefined,
-                password: undefined,
-                about: undefined,
-                address: undefined,
-                title: undefined,
-                role: undefined,
-                salary: undefined,
-                // occupancy: undefined,
-                company: undefined,
-                location: undefined,
-                city: undefined,
-                experience: undefined,
-                phone: undefined,
-                site: undefined,
-                gender: undefined,
-                pronouns: undefined,
-                skill1: undefined,
-                skill2: undefined,
-                skill3: undefined,
-                skill4: undefined,
-                skill5: undefined,
-                prevcompany: undefined,
-                prevlocation: undefined,
-                prevsalary: undefined,
-              });
+              setEditUser({ ...INIT_FORM, _id: profileId });
             }
           } catch (error) {
             setError({
@@ -230,6 +159,7 @@ export default function AccountHome() {
   const logOut = (event: any) => {
     setAuthorized(false);
     setProfileData(null);
+    setUser(undefined);
   };
 
   // const renderSalaries = salaries?.map(
@@ -263,7 +193,7 @@ export default function AccountHome() {
               type="text"
               required
               onChange={handleJobChange}
-              placeholder="Search"
+              value="Search"
             />
           </form>
         </div>
@@ -327,15 +257,15 @@ export default function AccountHome() {
                 <div className="job-container">
                   <h3>{profileData.occupancy.company}</h3>
                   <h4>{profileData.occupancy.location}</h4>
-                  <h2>Salary:{" " + profileData.occupancy.salary}</h2>
+                  <h2>Salary:{' ' + profileData.occupancy.salary}</h2>
                 </div>
                 <div className="job-container">
                   <h3>{profileData.previous?.prevcompany}</h3>
                   <h4>{profileData.previous?.prevlocation}</h4>
                   <h2>
                     {profileData.previous?.prevsalary
-                      ? "Salary: " + profileData.previous.prevsalary
-                      : ""}
+                      ? 'Salary: ' + profileData.previous.prevsalary
+                      : ''}
                   </h2>
                 </div>
               </div>
@@ -428,7 +358,7 @@ export default function AccountHome() {
                   <h3>
                     Phone:
                     <span>
-                      {profileData.phone ? " " + profileData.phone : ""}
+                      {profileData.phone ? ' ' + profileData.phone : ''}
                     </span>
                   </h3>
                   <h3>Address: {profileData.profile.address}</h3>
@@ -471,8 +401,9 @@ export default function AccountHome() {
                       <input
                         className="edit-input"
                         type="text"
-                        name="company"
-                        placeholder={profileData.occupancy.company}
+                        name="occupancy.company"
+                        placeholder={user?.occupancy?.company}
+                        value={editUser['occupancy.company']}
                         onChange={handleChange}
                       />
                     </h3>
@@ -480,12 +411,9 @@ export default function AccountHome() {
                       <input
                         className="edit-input"
                         type="text"
-                        name="location"
-                        placeholder={
-                          profileData.occupancy.location
-                            ? profileData.occupancy.location
-                            : "company location"
-                        }
+                        name="occupancy.location"
+                        placeholder={user?.occupancy?.location}
+                        value={editUser['occupancy.location']}
                         onChange={handleChange}
                       />
                     </h4>
@@ -495,8 +423,9 @@ export default function AccountHome() {
                         <input
                           className="salary-input"
                           type="number"
-                          name="salary"
-                          placeholder={profileData.occupancy.salary}
+                          name="occupancy.salary"
+                          placeholder={user?.occupancy?.salary}
+                          value={editUser['occupancy.salary']}
                           onChange={handleChange}
                         />
                       </span>
@@ -507,12 +436,9 @@ export default function AccountHome() {
                       <input
                         className="edit-input"
                         type="text"
-                        name="prevcompany"
-                        placeholder={
-                          profileData.previous?.prevcompany
-                            ? profileData.previous.prevcompany
-                            : "previous company name"
-                        }
+                        name="previous.prevcompany"
+                        placeholder={user?.previous?.prevcompany}
+                        value={editUser['previous.prevcompany']}
                         onChange={handleChange}
                       />
                     </h3>
@@ -520,12 +446,9 @@ export default function AccountHome() {
                       <input
                         className="edit-input"
                         type="text"
-                        name="prevlocation"
-                        placeholder={
-                          profileData.previous?.prevlocation
-                            ? profileData.previous.prevlocation
-                            : "previous company location"
-                        }
+                        name="previous.prevlocation"
+                        placeholder={user?.previous?.prevlocation}
+                        value={editUser['previous.prevlocation']}
                         onChange={handleChange}
                       />
                     </h4>
@@ -535,12 +458,9 @@ export default function AccountHome() {
                         <input
                           className="salary-input"
                           type="number"
-                          name="prevsalary"
-                          placeholder={
-                            profileData.previous?.prevsalary
-                              ? profileData.previous.prevsalary
-                              : "previous salary"
-                          }
+                          name="previous.prevsalary"
+                          placeholder={user?.previous?.prevsalary}
+                          value={editUser['previous.prevsalary']}
                           onChange={handleChange}
                         />
                       </span>
@@ -562,55 +482,60 @@ export default function AccountHome() {
                           className="edit-input"
                           type="text"
                           name="skill1"
-                          placeholder={profileData.skills?.skill1}
+                          placeholder={user?.skills?.skill1}
+                          // value={editUser?.skills?.skill1}
                           onChange={handleChange}
                         />
                       </h3>
                     </li>
                     <li>
                       <h3>
-                        {" "}
+                        {' '}
                         <input
                           className="edit-input"
                           type="text"
                           name="skill2"
-                          placeholder={profileData.skills?.skill2}
+                          placeholder={user?.skills?.skill2}
+                          // value={editUser?.skills?.skill2}
                           onChange={handleChange}
                         />
                       </h3>
                     </li>
                     <li>
                       <h3>
-                        {" "}
+                        {' '}
                         <input
                           className="edit-input"
                           type="text"
                           name="skill3"
-                          placeholder={profileData.skills?.skill3}
+                          placeholder={user?.skills?.skill3}
+                          // value={editUser?.skills?.skill3}
                           onChange={handleChange}
                         />
                       </h3>
                     </li>
                     <li>
                       <h3>
-                        {" "}
+                        {' '}
                         <input
                           className="edit-input"
                           type="text"
                           name="skill4"
-                          placeholder={profileData.skills?.skill4}
+                          placeholder={user?.skills?.skill4}
+                          // value={editUser?.skills?.skill4}
                           onChange={handleChange}
                         />
                       </h3>
                     </li>
                     <li>
                       <h3>
-                        {" "}
+                        {' '}
                         <input
                           className="edit-input"
                           type="text"
                           name="skill5"
-                          placeholder={profileData.skills?.skill5}
+                          placeholder={user?.skills?.skill5}
+                          // value={editUser.skills?.skill5}
                           onChange={handleChange}
                         />
                       </h3>
@@ -622,7 +547,7 @@ export default function AccountHome() {
               <div className="column-two">
                 <div className="profile-container">
                   <div className="profile-name-container">
-                    <h1 className="profile-name">{profileData.profile.name}</h1>
+                    <h1 className="profile-name">{editUser['profile.name']}</h1>
                     <div className="location-container">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -636,9 +561,8 @@ export default function AccountHome() {
                           className="city-input"
                           type="text"
                           name="city"
-                          placeholder={
-                            profileData.city ? profileData.city : "city, state"
-                          }
+                          placeholder={user?.city}
+                          value={editUser.city}
                           onChange={handleChange}
                         />
                       </h4>
@@ -650,8 +574,9 @@ export default function AccountHome() {
                       <input
                         className="title-input"
                         type="string"
-                        name="title"
-                        placeholder={profileData.occupancy.title}
+                        name="occupancy.title"
+                        placeholder={user?.occupancy?.title}
+                        value={editUser['occupancy.title']}
                         onChange={handleChange}
                       />
                     </h3>
@@ -660,11 +585,8 @@ export default function AccountHome() {
                         className="salary-input"
                         type="number"
                         name="experience"
-                        placeholder={
-                          profileData.experience
-                            ? profileData.experience + " years Experience"
-                            : "years of experience"
-                        }
+                        placeholder={user?.experience}
+                        value={editUser.experience}
                         onChange={handleChange}
                       />
                     </h4>
@@ -676,8 +598,9 @@ export default function AccountHome() {
                     <input
                       className="edit-input"
                       type="text"
-                      name="about"
-                      placeholder={profileData.profile.about}
+                      name="profile.about"
+                      placeholder={user?.profile?.about}
+                      value={editUser['profile.about']}
                       onChange={handleChange}
                     />
                   </p>
@@ -721,12 +644,13 @@ export default function AccountHome() {
                     <h3>
                       Phone:
                       <span>
-                        {" "}
+                        {' '}
                         <input
                           className="edit-input"
                           type="number"
                           name="phone"
-                          placeholder={profileData.phone}
+                          placeholder={user?.phone}
+                          value={editUser.phone}
                           onChange={handleChange}
                         />
                       </span>
@@ -736,8 +660,9 @@ export default function AccountHome() {
                       <input
                         className="edit-input"
                         type="text"
-                        name="address"
-                        placeholder={profileData.profile.address}
+                        name="profile.address"
+                        placeholder={user?.profile?.address}
+                        value={editUser['profile.address']}
                         onChange={handleChange}
                       />
                     </h3>
@@ -748,28 +673,30 @@ export default function AccountHome() {
                           className="edit-input"
                           type="text"
                           name="email"
-                          placeholder={profileData.email}
+                          placeholder={user?.email}
+                          value={editUser.email}
                           onChange={handleChange}
                         />
                       </span>
                     </h3>
                     <h3>
-                      {" "}
-                      Site:{" "}
+                      {' '}
+                      Site:{' '}
                       <span>
                         <input
                           className="edit-input"
                           type="text"
                           name="site"
-                          placeholder={profileData.site}
+                          placeholder={user?.site}
+                          value={editUser.site}
                           onChange={handleChange}
                         />
-                      </span>{" "}
+                      </span>{' '}
                     </h3>
                   </div>
                   <div className="personal-container">
                     <h4>Personal information</h4>
-                    <h3>Birthday: {profileData.profile.dob}</h3>
+                    <h3>Birthday: {user?.profile?.dob}</h3>
                     <h3>
                       Password:{' '}
                       <div>
@@ -778,31 +705,34 @@ export default function AccountHome() {
                           className="salary-input"
                           type="text"
                           name="password"
-                          placeholder={profileData.password}
+                          placeholder={user?.password}
+                          value={editUser.password}
                           onChange={handleChange}
                         />
                       </div>
                     </h3>
                     <h3>
-                      Gender:{" "}
+                      Gender:{' '}
                       <span>
                         <input
                           className="salary-input"
                           type="text"
                           name="gender"
-                          placeholder={profileData.gender}
+                          placeholder={user?.gender}
+                          value={editUser.gender}
                           onChange={handleChange}
                         />
                       </span>
                     </h3>
                     <h3>
-                      Pronouns:{" "}
+                      Pronouns:{' '}
                       <span>
                         <input
                           className="salary-input"
                           type="text"
                           name="pronouns"
-                          placeholder={profileData.pronouns}
+                          placeholder={user?.pronouns}
+                          value={editUser.pronouns}
                           onChange={handleChange}
                         />
                       </span>
