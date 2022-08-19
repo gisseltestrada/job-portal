@@ -9,6 +9,7 @@ export default function SalaryComponent(props: {
   company: string | null;
   occupancy: string | null;
 }) {
+
   return (
     <div>
       <h1 className="job-name">
