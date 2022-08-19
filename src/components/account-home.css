@@ -6,7 +6,7 @@
 }
 
 .account-header {
-  background-color: var(--light-grey);
+ margin-top: 2.4rem;
   display: flex;
   justify-content: center;
   height: 6.5rem;
@@ -75,7 +75,7 @@ color: lightgray;
   display: flex;
   justify-content: center;
   text-align: left;
-  margin-top: 2rem;
+  margin-top: 3.25rem;
 }
 
 h2{

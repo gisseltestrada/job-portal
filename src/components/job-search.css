@@ -1,0 +1,250 @@
+:root {
+  --main-grey: #c2cad2;
+  --dark-grey: #5e5f62;
+  --light-grey: #cdcdcd;
+  --gold: #b7986f;
+}
+
+.job-search-container {
+  display: flex;
+  justify-content: center;
+}
+
+.job-search-filters {
+  display: flex;
+  flex-direction: column;
+  width: 270px;
+  margin-top: 5rem;
+}
+
+.filter-by {
+  display: flex;
+  justify-content: space-between;
+  width: 220px;
+  padding-bottom: 1rem;
+  margin-left: 12px;
+}
+
+.filter-by h3 {
+  padding: 0;
+  margin: 0;
+}
+
+.filter-by button {
+  padding: 0;
+  margin: 0;
+  font-weight: 600;
+  color: var(--dark-grey);
+  font-size: 0.85rem;
+  margin-top: 6px;
+  border: none;
+  background: none;
+}
+
+/* form{
+    width: 339px;
+} */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+
+  align-content: space-between;
+}
+
+fieldset input {
+  display: flex;
+}
+.legend-label button svg{
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  margin-top: -5px;
+}
+
+legend {
+  /* background: none;
+  color: none; */
+  font-weight: 600;
+  color: var(--dark-grey);
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+.legend-label button{
+    padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  border: none;
+  background: none;
+}
+
+.legend-label{
+    display: flex;
+    justify-content: space-between;
+    width: 220px;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.checkbox-container {
+  display: flex;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+.checkbox-container input {
+  width: 1rem;
+}
+
+.remote-container,
+.salary-range,
+.job-location {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 5px 5px 20px #b9c5cc96;
+  border-radius: 12px;
+  opacity: 1;
+  width: 250px;
+}
+
+.remote-container {
+  height: 170px;
+  margin-bottom: 1rem;
+}
+
+
+.checkbox-container label {
+  color: #5e5f62;
+  font-size: 0.9rem;
+  font-weight: 200;
+}
+
+.salary-range {
+  height: 140px;
+    margin-bottom: 1rem;
+}
+.range-container{
+    margin: 0 auto;
+    padding: 0;
+    margin-left: 25px;
+}
+.range-quantity{
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+   margin-bottom: 0;
+   margin-top: 5px;
+   
+}
+.salary-range input{
+    width: 200px;
+    margin: 0;
+    padding: 0;
+    margin-left: 5px;
+}
+
+.salary-range p {
+    color: var(--dark-grey);
+    font-weight: 900;
+    font-size: .75rem;
+    margin: 3px;
+  
+}
+.salary-range label{
+    color: var(--dark-grey);
+    font-weight: 900;
+    font-size: 1rem;
+    font-family:'Courier New', Courier, monospace;
+    margin-left: -25px;
+ 
+}
+
+.job-location {
+  min-height: 200px;
+}
+
+.submit-form {
+    padding: 0;
+  margin: 0;
+  font-weight: 600;
+  color: var(--dark-grey);
+  font-size: 0.9rem;
+  margin-top: 10px;
+  border: none;
+  background: none;
+  margin-right: -120px;
+}
+
+.job-search-results {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4rem;
+  padding-left: 1rem;
+}
+
+.job-posting {
+  margin: 1rem;
+  left: 731px;
+  width: 700px;
+  min-height: 175px;
+  /* UI Properties */
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 5px 5px 20px #b9c5cc96;
+  border-radius: 12px;
+  opacity: 1;
+}
+
+.job-posting h2 {
+  color: #5e5f62;
+  font-size: 1.75rem;
+  text-align: left;
+  padding-left: 3rem;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+.job-posting h2 span {
+  color: #5e5f62;
+  font-size: 1.6rem;
+  font-weight: 200;
+}
+
+.job-info {
+  display: flex;
+  justify-content: space-around;
+  width: 500px;
+  margin-left: 1rem;
+}
+.job-info div {
+  display: flex;
+}
+.job-info svg {
+  fill: var(--light-grey);
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  margin-top: 22px;
+  margin-right: 2px;
+}
+.job-info p {
+  font-size: 0.95rem;
+  margin-top: 25px;
+  color: rgb(177, 177, 177);
+}
+
+.keywords {
+  display: flex;
+  justify-content: space-between;
+  width: 450px;
+  font-size: 0.95rem;
+  margin-left: 3.5rem;
+}
+.keywords div p {
+  background-color: #faf2e8;
+  background: #faf2e8 0% 0% no-repeat padding-box;
+  border-radius: 6px;
+  opacity: 1;
+  height: 1rem;
+  padding: 6px 10px;
+  margin-top: 0px;
+}

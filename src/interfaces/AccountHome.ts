@@ -1,10 +1,12 @@
 export interface SalaryResponse {
+  occupancy: string | null;
   message: string;
   success: boolean;
   user: SalaryByJob;
 }
 
 export interface SalaryByJob {
+  occupancy: string;
   average: string;
   salary: number[];
 }

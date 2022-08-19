@@ -4,6 +4,7 @@ import { LoginContext, ProfileContext } from '../Helper/context';
 import { Link, Navigate } from 'react-router-dom';
 import env from 'react-dotenv';
 import SalaryComponent from './salary-component';
+import JobSearchComponent from './job-search';
 import axios from 'axios';
 import picture from '../images/catnoir.jpeg';
 import {
@@ -33,6 +34,7 @@ export default function AccountHome() {
   const profileId = profileData._id;
   const [edit, setEdit] = useState<boolean>(false);
   const [mainPage, setMainPage] = useState<boolean>(true);
+  const [jobSearchPage, setJobSearchPage] = useState<boolean>(false);
   const [user, setUser] = useState<User | undefined>({
     _id: profileId,
     ...profileData,
@@ -59,6 +61,7 @@ export default function AccountHome() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setError(null);
     setMainPage(false);
+    setJobSearchPage(false);
     // setSalaries(null);
     event.preventDefault();
     console.log(occupancy, apiUrl);
@@ -173,7 +176,7 @@ export default function AccountHome() {
   // );
 
   return (
-    <div>
+    <div className="profile-background">
       <header className="account-header">
         <h1 className="company-name">{profileData.occupancy.company}</h1>
         <div className="income-div">
@@ -194,7 +197,7 @@ export default function AccountHome() {
               type="text"
               required
               onChange={handleJobChange}
-              value="Search"
+              placeholder="Search"
             />
           </form>
         </div>
@@ -206,6 +209,7 @@ export default function AccountHome() {
                 href="#"
                 onClick={() => {
                   setMainPage(false);
+                  setJobSearchPage(true);
                 }}
               >
                 Jobs
@@ -258,15 +262,15 @@ export default function AccountHome() {
                 <div className="job-container">
                   <h3>{profileData.occupancy.company}</h3>
                   <h4>{profileData.occupancy.location}</h4>
-                  <h2>Salary:{' ' + profileData.occupancy.salary}</h2>
+                  <h2>Salary:{" " + profileData.occupancy.salary}</h2>
                 </div>
                 <div className="job-container">
                   <h3>{profileData.previous?.prevcompany}</h3>
                   <h4>{profileData.previous?.prevlocation}</h4>
                   <h2>
                     {profileData.previous?.prevsalary
-                      ? 'Salary: ' + profileData.previous.prevsalary
-                      : ''}
+                      ? "Salary: " + profileData.previous.prevsalary
+                      : ""}
                   </h2>
                 </div>
               </div>
@@ -359,7 +363,7 @@ export default function AccountHome() {
                   <h3>
                     Phone:
                     <span>
-                      {profileData.phone ? ' ' + profileData.phone : ''}
+                      {profileData.phone ? " " + profileData.phone : ""}
                     </span>
                   </h3>
                   <h3>Address: {profileData.profile.address}</h3>
@@ -404,7 +408,7 @@ export default function AccountHome() {
                         type="text"
                         name="occupancy.company"
                         placeholder={user?.occupancy?.company}
-                        value={editUser['occupancy.company']}
+                        value={editUser["occupancy.company"]}
                         onChange={handleChange}
                       />
                     </h3>
@@ -414,7 +418,7 @@ export default function AccountHome() {
                         type="text"
                         name="occupancy.location"
                         placeholder={user?.occupancy?.location}
-                        value={editUser['occupancy.location']}
+                        value={editUser["occupancy.location"]}
                         onChange={handleChange}
                       />
                     </h4>
@@ -426,7 +430,7 @@ export default function AccountHome() {
                           type="number"
                           name="occupancy.salary"
                           placeholder={user?.occupancy?.salary}
-                          value={editUser['occupancy.salary']}
+                          value={editUser["occupancy.salary"]}
                           onChange={handleChange}
                         />
                       </span>
@@ -439,7 +443,7 @@ export default function AccountHome() {
                         type="text"
                         name="previous.prevcompany"
                         placeholder={user?.previous?.prevcompany}
-                        value={editUser['previous.prevcompany']}
+                        value={editUser["previous.prevcompany"]}
                         onChange={handleChange}
                       />
                     </h3>
@@ -449,7 +453,7 @@ export default function AccountHome() {
                         type="text"
                         name="previous.prevlocation"
                         placeholder={user?.previous?.prevlocation}
-                        value={editUser['previous.prevlocation']}
+                        value={editUser["previous.prevlocation"]}
                         onChange={handleChange}
                       />
                     </h4>
@@ -461,7 +465,7 @@ export default function AccountHome() {
                           type="number"
                           name="previous.prevsalary"
                           placeholder={user?.previous?.prevsalary}
-                          value={editUser['previous.prevsalary']}
+                          value={editUser["previous.prevsalary"]}
                           onChange={handleChange}
                         />
                       </span>
@@ -491,7 +495,7 @@ export default function AccountHome() {
                     </li>
                     <li>
                       <h3>
-                        {' '}
+                        {" "}
                         <input
                           className="edit-input"
                           type="text"
@@ -504,7 +508,7 @@ export default function AccountHome() {
                     </li>
                     <li>
                       <h3>
-                        {' '}
+                        {" "}
                         <input
                           className="edit-input"
                           type="text"
@@ -517,7 +521,7 @@ export default function AccountHome() {
                     </li>
                     <li>
                       <h3>
-                        {' '}
+                        {" "}
                         <input
                           className="edit-input"
                           type="text"
@@ -530,7 +534,7 @@ export default function AccountHome() {
                     </li>
                     <li>
                       <h3>
-                        {' '}
+                        {" "}
                         <input
                           className="edit-input"
                           type="text"
@@ -548,7 +552,7 @@ export default function AccountHome() {
               <div className="column-two">
                 <div className="profile-container">
                   <div className="profile-name-container">
-                    <h1 className="profile-name">{editUser['profile.name']}</h1>
+                    <h1 className="profile-name">{editUser["profile.name"]}</h1>
                     <div className="location-container">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -577,7 +581,7 @@ export default function AccountHome() {
                         type="string"
                         name="occupancy.title"
                         placeholder={user?.occupancy?.title}
-                        value={editUser['occupancy.title']}
+                        value={editUser["occupancy.title"]}
                         onChange={handleChange}
                       />
                     </h3>
@@ -601,7 +605,7 @@ export default function AccountHome() {
                       type="text"
                       name="profile.about"
                       placeholder={user?.profile?.about}
-                      value={editUser['profile.about']}
+                      value={editUser["profile.about"]}
                       onChange={handleChange}
                     />
                   </p>
@@ -645,7 +649,7 @@ export default function AccountHome() {
                     <h3>
                       Phone:
                       <span>
-                        {' '}
+                        {" "}
                         <input
                           className="edit-input"
                           type="number"
@@ -657,18 +661,18 @@ export default function AccountHome() {
                       </span>
                     </h3>
                     <h3>
-                      Address:{' '}
+                      Address:{" "}
                       <input
                         className="edit-input"
                         type="text"
                         name="profile.address"
                         placeholder={user?.profile?.address}
-                        value={editUser['profile.address']}
+                        value={editUser["profile.address"]}
                         onChange={handleChange}
                       />
                     </h3>
                     <h3>
-                      Email:{' '}
+                      Email:{" "}
                       <span>
                         <input
                           className="edit-input"
@@ -681,8 +685,8 @@ export default function AccountHome() {
                       </span>
                     </h3>
                     <h3>
-                      {' '}
-                      Site:{' '}
+                      {" "}
+                      Site:{" "}
                       <span>
                         <input
                           className="edit-input"
@@ -692,16 +696,16 @@ export default function AccountHome() {
                           value={editUser.site}
                           onChange={handleChange}
                         />
-                      </span>{' '}
+                      </span>{" "}
                     </h3>
                   </div>
                   <div className="personal-container">
                     <h4>Personal information</h4>
                     <h3>Birthday: {user?.profile?.dob}</h3>
                     <h3>
-                      Password:{' '}
+                      Password:{" "}
                       <div>
-                        {' '}
+                        {" "}
                         <input
                           className="salary-input"
                           type="text"
@@ -713,7 +717,7 @@ export default function AccountHome() {
                       </div>
                     </h3>
                     <h3>
-                      Gender:{' '}
+                      Gender:{" "}
                       <span>
                         <input
                           className="salary-input"
@@ -726,7 +730,7 @@ export default function AccountHome() {
                       </span>
                     </h3>
                     <h3>
-                      Pronouns:{' '}
+                      Pronouns:{" "}
                       <span>
                         <input
                           className="salary-input"
@@ -750,20 +754,16 @@ export default function AccountHome() {
       )}
 
       <div>
-        {!mainPage && data && (
+        {!mainPage && !jobSearchPage && data && (
           <SalaryComponent
             salaries={salaries}
             average={average}
             company={profileData.occupancy.company}
-            occupancy={occupancy}
+            occupancy={data.user.occupancy}
           />
         )}
-        {!mainPage && !data && (
-          <SalaryComponent
-            salaries={null}
-            average={null}
-            occupancy={null}
-            company={null}
+        {!mainPage && jobSearchPage && (
+          <JobSearchComponent
           />
         )}
         {/* {error && !mainPage && (

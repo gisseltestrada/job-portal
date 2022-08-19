@@ -11,7 +11,18 @@
   height: 100vh;
   margin-top: -20px;
 }
-
+.profile-background{
+  background-image: url(./images/nav.svg);
+    margin-top: -50px;
+left: -13.093994140625px;
+  background-repeat: no-repeat;
+  background-size: 100%;
+/* width: 1938px;
+height: 249px; */
+/* UI Properties */
+/* background: #C2CAD2 0% 0% no-repeat padding-box; */
+/* opacity: 1; */
+}
 
 .App-logo {
   height: 40vmin;
